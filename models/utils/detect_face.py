@@ -22,8 +22,12 @@ def detect_face(imgs, minsize, pnet, rnet, onet, threshold, factor, device):
 
     imgs = torch.as_tensor(imgs, device=device)
 
+    # only permute if not already permuted
+    if imgs.shape[3] == 3:
+        imgs = imgs.permute(0, 3, 1, 2)
+
     model_dtype = next(pnet.parameters()).dtype
-    imgs = imgs.permute(0, 3, 1, 2).type(model_dtype)
+    imgs = imgs.type(model_dtype)
 
     batch_size = len(imgs)
     h, w = imgs.shape[2:4]
